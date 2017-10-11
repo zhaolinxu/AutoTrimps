@@ -52,7 +52,7 @@ function initializeAutoTrimps() {
 }
 
 function printChangelog() {
-    tooltip('confirm', null, 'update', '\
+    tooltip('确定', null, 'update', '\
 <br><b style="background-color:#002b3b;color:#fff;">8/26 v2.1.5.6</b>  将所有Unihedro的分支合并回genBTC分支。 （感谢UniHedro）\
 <br> 修复铅计算器，占卜设备，小修复。 (感谢FirenX) \
 <br> UniHedro保存格式已更新，首次加载可能会很奇怪。 \
