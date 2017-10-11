@@ -53,13 +53,13 @@ function initializeAutoTrimps() {
 
 function printChangelog() {
     tooltip('confirm', null, 'update', '\
-<br><b style="background-color:#002b3b">8/26 v2.1.5.6</b>  Merge ALL of Unihedro branch back into genBTC branch. (thanks UniHedro)\
-<br> fix Lead Calc, scryer equipment, little fixes. (thanks to FirenX) \
-<br> The UniHedro save format was updated, first load may be weird. \
-<br> Cheap Fixes: Toggling Prestige dropdown, Save Settings, *backup savegame*, *backup AT settings*, Refresh/Restart Browser.  \
-<br><u>Report any bugs/problems please! You can find me on Discord: <span style="background-color:#ddd;color:#222">genr8_#8163</span></u>\
-<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">Check the commit history</a> (if you care)\
-', 'cancelTooltip()', 'Script Update Notice ' + ATversion);
+<br><b style="background-color:#002b3b;color:#fff;">8/26 v2.1.5.6</b>  将所有Unihedro的分支合并回genBTC分支。 （感谢UniHedro）\
+<br> 修复铅计算器，占卜设备，小修复。 (感谢FirenX) \
+<br> UniHedro保存格式已更新，首次加载可能会很奇怪。 \
+<br> 便宜的修复：切换威望下拉菜单，保存设置，*备份保存游戏*，*备份本脚本的设置*，刷新/重新启动浏览器。  \
+<br><u>欢迎提交您发现的任何错误/问题！ 你可以在Discord找到我： <span style="background-color:#ddd;color:#222">genr8_#8163</span></u>\
+<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">检查提交历史</a> (如果你想了解)\
+', 'cancelTooltip()', '脚本更新公告 ' + ATversion);
 }
 ////////////////////////////////////////
 //Main DELAY Loop///////////////////////
