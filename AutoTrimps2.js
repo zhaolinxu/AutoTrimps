@@ -14,7 +14,7 @@ var ATversion = '2.1.5.6-genbtc-8-26-2017+Modular';
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////
 var atscript = document.getElementById('AutoTrimps-script')
-  , base = 'https://genbtc.github.io/AutoTrimps/'
+  , base = 'https://zhaolinxu.github.io/AutoTrimps/'
   , module = 'modules/'
   ;
 if (atscript !== null) {

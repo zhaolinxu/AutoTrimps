@@ -243,7 +243,7 @@ function message2(messageString, type, lootIcon, extraClass) {
 //HTML For adding a 5th tab to the message window
 //
 var ATbutton = document.createElement("button");
-ATbutton.innerHTML = 'AutoTrimps';
+ATbutton.innerHTML = '脆皮自动脚本';
 ATbutton.setAttribute('id', 'AutoTrimpsFilter');
 ATbutton.setAttribute('type', 'button');
 ATbutton.setAttribute('onclick', "filterMessage2('AutoTrimps')");
@@ -262,7 +262,7 @@ function filterMessage2(what){
     AutoTrimpsDebugTabVisible = displayed;
 
     var toChange = document.getElementsByClassName(what + "Message");
-    var btnText = (displayed) ? what : what + " off";
+    var btnText = (displayed) ? what : what + " 关";
     var btnElem = document.getElementById(what + "Filter");
     btnElem.innerHTML = btnText;
     btnElem.className = "";
@@ -281,7 +281,7 @@ function formatMinutesForDescriptions(number){
     var minutes = Math.floor(number % 60);
     var hours = Math.floor(number / 60);
     if (hours == 0)
-        text = minutes + " minutes " + seconds + " seconds";
+        text = minutes + " 分 " + seconds + " 秒";
     else if (minutes > 0) {
         if (minutes < 10) minutes = "0" + minutes;
         if (seconds < 10) seconds = "0" + seconds;
@@ -291,7 +291,7 @@ function formatMinutesForDescriptions(number){
         var hs = (hours > 1) ? "s" : "";
         var ms = (minutes > 1) ? "s" : "";
         var ss = (seconds > 1) ? "s" : "";
-        text = hours + " hour" + hs + " " + minutes + " minute" + ms + " " + seconds + " second" + ss;
+        text = hours + " 小时" + hs + " " + minutes + " 分" + ms + " " + seconds + " 秒" + ss;
     }
     return text;
 }
