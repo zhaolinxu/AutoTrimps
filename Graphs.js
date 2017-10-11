@@ -92,7 +92,7 @@ function GraphsImportExportTooltip(what, isItIn, event) {
                       try {
                         document.execCommand('copy');
                       } catch (err) {
-                        document.getElementById('clipBoardBtn').innerHTML = "Error, not copied";
+                        document.getElementById('clipBoardBtn').innerHTML = "错误，未复制";
                       }
                 });
             };

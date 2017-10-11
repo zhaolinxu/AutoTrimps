@@ -733,20 +733,20 @@ function autoMap() {
 function updateAutoMapsStatus() {
     //automaps status
     var status = document.getElementById('autoMapStatus');
-    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = 'Off';
+    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = '关';
     else if (preSpireFarming) status.innerHTML = 'Spire farming for ' + (spireTime >= 60 ? (spireTime / 60).toFixed(2) + 'h' : spireTime.toFixed(2) + 'm');
     else if (!game.global.mapsUnlocked) status.innerHTML = '&nbsp;';
-    else if (needPrestige && !doVoids) status.innerHTML = 'Prestige';
+    else if (needPrestige && !doVoids) status.innerHTML = '声望';
     else if (doVoids && voidCheckPercent == 0) status.innerHTML = 'Void Maps: ' + game.global.totalVoidMaps + ' remaining';
-    else if (stackingTox) status.innerHTML = 'Getting Tox Stacks';
+    else if (stackingTox) status.innerHTML = '获得弓形虫堆栈';
     else if (needToVoid && !doVoids && game.global.totalVoidMaps > 0) status.innerHTML = 'Prepping for Voids';
     else if (doVoids && voidCheckPercent > 0) status.innerHTML = 'Farming to do Voids: ' + voidCheckPercent + '%';
-    else if (shouldFarm && !doVoids) status.innerHTML = 'Farming: ' + HDratio.toFixed(4) + 'x';
-    else if (scryerStuck) status.innerHTML = 'Scryer Got Stuck, Farming';
-    else if (!enoughHealth && !enoughDamage) status.innerHTML = 'Want Health & Damage';
-    else if (!enoughDamage) status.innerHTML = 'Want ' + HDratio.toFixed(4) + 'x &nbspmore damage';
-    else if (!enoughHealth) status.innerHTML = 'Want more health';
-    else if (enoughHealth && enoughDamage) status.innerHTML = 'Advancing';
+    else if (shouldFarm && !doVoids) status.innerHTML = '耕作: ' + HDratio.toFixed(4) + 'x';
+    else if (scryerStuck) status.innerHTML = '占星者被困，耕作';
+    else if (!enoughHealth && !enoughDamage) status.innerHTML = '需要生命 & 伤害';
+    else if (!enoughDamage) status.innerHTML = '需要 ' + HDratio.toFixed(4) + 'x &nbsp更多伤害';
+    else if (!enoughHealth) status.innerHTML = '需要更多生命';
+    else if (enoughHealth && enoughDamage) status.innerHTML = '前进';
 
     if (skippedPrestige) // Show skipping prestiges
       status.insertAdjacentHTML('afterbegin', '<b style="font-size:.8em;color:pink">Prestige Skipped</b><br>');

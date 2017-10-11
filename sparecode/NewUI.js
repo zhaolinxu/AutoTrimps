@@ -8,10 +8,10 @@ automationMenuInit();
 
 //Booleans//
 
-createSetting('ManualGather', 'Auto Gather/Build', 'Automatically gathers resources (and uses Turkimp on metal). Auto speed-builds your build queue and auto-researches science on demand.', 'boolean',true);
-createSetting('AutoFight', 'Better Auto Fight', 'Will automatically handle fighting. It gives you autofight before you get the Battle upgrade in Zone 1.. .CAUTION: If you autoportal with BetterAutoFight disabled, the game sits there doing nothing until you click FIGHT. (not good for afk) ', 'boolean',true);
-createSetting('AutoStance', 'Auto Stance', 'Automatically swap stances to avoid death.', 'boolean',true);
-createSetting('TrapTrimps', 'Trap Trimps', 'Automatically trap trimps when needed, including building traps.', 'boolean',true);
+createSetting('手动收集', '自动收集/建造', '自动收集资源（并在金属上使用土耳其地图）。 自动快速构建您的构建队列，并根据需要自动研究科学。', 'boolean',true);
+createSetting('自动战斗', 'Better Auto Fight', 'Will automatically handle fighting. It gives you autofight before you get the Battle upgrade in Zone 1.. .CAUTION: If you autoportal with BetterAutoFight disabled, the game sits there doing nothing until you click FIGHT. (not good for afk) ', 'boolean',true);
+createSetting('自动立场', 'Auto Stance', 'Automatically swap stances to avoid death.', 'boolean',true);
+createSetting('脆皮陷阱', 'Trap Trimps', 'Automatically trap trimps when needed, including building traps.', 'boolean',true);
 createSetting('BuyStorage', 'Buy Storage', 'Will buy storage when resource is almost full. (like AutoStorage, even anticipates Jestimp)', 'boolean',true);
 createSetting('BuyJobs', 'Buy Jobs', 'Buys jobs based on ratios configured below. CAUTION: you cannot manually assign jobs with this. Toggle if you need to.', 'boolean',true);
 createSetting('BuyBuildings', 'Buy Buildings', 'Will buy non storage buildings as soon as they are available', 'boolean',true);
@@ -69,7 +69,7 @@ var advHeader = document.createElement("DIV");
 var advBtn = document.createElement("DIV");
 advBtn.setAttribute('class', 'btn btn-default');
 advBtn.setAttribute('onclick', 'autoToggle(\'advancedSettings\')');
-advBtn.innerHTML = 'Advanced Settings';
+advBtn.innerHTML = '高级设置';
 advBtn.setAttribute("onmouseover", 'tooltip(\"Advanced Settings\", \"customText\", event, \"Leave off unless you know what you\'re doing with them.\")');
 advBtn.setAttribute("onmouseout", 'tooltip("hide")');
 advBtn.setAttribute('style', 'margin-left: 1vw; margin-right: 1vw; margin-bottom: 1vw; font-size: 0.8vw;');
@@ -95,7 +95,7 @@ createSetting('DisableFarm', 'Disable Farming', 'Disables the farming section of
 var genbtcBtn = document.createElement("DIV");
 genbtcBtn.setAttribute('class', 'btn btn-default');
 genbtcBtn.setAttribute('onclick', 'autoToggle(\'genbtcadvancedSettings\')');
-genbtcBtn.innerHTML = 'genBTC Advanced Settings';
+genbtcBtn.innerHTML = 'genBTC高级设置';
 genbtcBtn.setAttribute("onmouseover", 'tooltip(\"genBTC Advanced Settings\", \"customText\", event, \"Leave off unless you know what you\'re doing with them.\")');
 genbtcBtn.setAttribute("onmouseout", 'tooltip("hide")');
 genbtcBtn.setAttribute('style', 'margin-left: 1vw; margin-right: 1vw; margin-bottom: 1vw;  font-size: 0.8vw;');
@@ -125,7 +125,7 @@ createSetting('AutoHeirlooms2', 'Auto Heirlooms2', 'New algorithm for Heirlooms.
 createSetting('AutoGoldenUpgrades', 'AutoGoldenUpgrades', 'Automatically Buy the specified Golden Upgrades as they become available.', 'dropdown', 'Off', ["Off","Helium", "Battle", "Void"], 'genbtcadvancedSettings');
 var AGULabel = document.createElement("Label");
 AGULabel.id = 'AutoGoldenUpgradesLabel';
-AGULabel.innerHTML = "Golden Upgrades:";
+AGULabel.innerHTML = "黄金升级:";
 AGULabel.setAttribute('style', 'margin-right: 0.4vw; font-size: 0.8vw;');
 document.getElementById("AutoGoldenUpgrades").parentNode.insertBefore(AGULabel,document.getElementById("AutoGoldenUpgrades"))
 createSetting('AutoUpgradeHeirlooms', 'Auto Upgrade Heirlooms', 'Automatically buy the upgrade the script advises for the Equipped shield and staff, until we are out of nullifium.', 'boolean', null, null,'genbtcadvancedSettings');
@@ -137,7 +137,7 @@ createSetting('CorruptionCalc', 'Corruption Farm Mode', 'Enabling this will caus
 var importexportBtn = document.createElement("DIV");
 importexportBtn.setAttribute('class', 'btn btn-default');
 importexportBtn.setAttribute('onclick', 'autoToggle(\'importexportSettings\')');
-importexportBtn.innerHTML = 'Import/Export Settings';
+importexportBtn.innerHTML = '导入/导出设置';
 importexportBtn.setAttribute("onmouseover", 'tooltip(\"Import/Export Settings\", \"customText\", event, \"Expand the Import/Export/Reset Autotrimps section.\")');
 importexportBtn.setAttribute("onmouseout", 'tooltip("hide")');
 importexportBtn.setAttribute('style', 'margin-left: 1vw; margin-right: 1vw; margin-bottom: 1vw; font-size: 0.8vw;');
@@ -157,7 +157,7 @@ createSetting('DefaultAutoTrimps', 'Reset to Default', 'Reset everything to the 
 var scryerSettingsBtn = document.createElement("DIV");
 scryerSettingsBtn.setAttribute('class', 'btn btn-default');
 scryerSettingsBtn.setAttribute('onclick', 'autoToggle(\'scryerSettings\')');
-scryerSettingsBtn.innerHTML = 'Scryer Stance Settings';
+scryerSettingsBtn.innerHTML = '占星者姿态设置';
 scryerSettingsBtn.setAttribute("onmouseover", 'tooltip(\"Scryer Stance Settings\", \"customText\", event, \"Expand the Scryer Stance settings section.\")');
 scryerSettingsBtn.setAttribute("onmouseout", 'tooltip("hide")');
 scryerSettingsBtn.setAttribute('style', 'margin-left: 1vw; margin-right: 1vw; margin-bottom: 1vw; font-size: 0.8vw;');
@@ -239,7 +239,7 @@ function AutoTrimpsTooltip(what, isItIn, event) {
                       try {
                         document.execCommand('copy');
                       } catch (err) {
-                        document.getElementById('clipBoardBtn').innerHTML = "Error, not copied";
+                        document.getElementById('clipBoardBtn').innerHTML = "错误，未复制";
                       }
                 });
             };
@@ -584,17 +584,17 @@ function updateValueFields() {
     }
     //automaps status
     var status = document.getElementById('autoMapStatus');
-    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = 'Off';
-    else if(needPrestige && !doVoids) status.innerHTML = 'Prestige';
-    else if(doVoids && voidCheckPercent == 0) status.innerHTML = 'Void Maps: ' + game.global.totalVoidMaps + ' remaining';
-    else if(needToVoid && !doVoids && game.global.totalVoidMaps > 0 && !stackingTox) status.innerHTML = 'Prepping for Voids';
-    else if(doVoids && voidCheckPercent > 0) status.innerHTML = 'Farming to do Voids: ' + voidCheckPercent + '%';
-    else if(shouldFarm && !doVoids) status.innerHTML = 'Farming: ' + HDratio.toFixed(4) + 'x';
-    else if(stackingTox) status.innerHTML = 'Getting Tox Stacks';
-    else if (!enoughHealth && !enoughDamage) status.innerHTML = 'Want Health & Damage';
-    else if (!enoughDamage) status.innerHTML = 'Want ' + HDratio.toFixed(4) + 'x &nbspmore damage';
-    else if (!enoughHealth) status.innerHTML = 'Want more health';   
-    else if (enoughHealth && enoughDamage) status.innerHTML = 'Advancing';
+    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = '关';
+    else if(needPrestige && !doVoids) status.innerHTML = '声望';
+    else if(doVoids && voidCheckPercent == 0) status.innerHTML = '空地图: ' + game.global.totalVoidMaps + ' 剩余';
+    else if(needToVoid && !doVoids && game.global.totalVoidMaps > 0 && !stackingTox) status.innerHTML = '准备的空间';
+    else if(doVoids && voidCheckPercent > 0) status.innerHTML = '耕作空间: ' + voidCheckPercent + '%';
+    else if(shouldFarm && !doVoids) status.innerHTML = '耕作: ' + HDratio.toFixed(4) + 'x';
+    else if(stackingTox) status.innerHTML = '获得弓形虫堆栈';
+    else if (!enoughHealth && !enoughDamage) status.innerHTML = '需要生命和伤害';
+    else if (!enoughDamage) status.innerHTML = '需要 ' + HDratio.toFixed(4) + 'x &nbsp更多伤害';
+    else if (!enoughHealth) status.innerHTML = '需要更多生命值';   
+    else if (enoughHealth && enoughDamage) status.innerHTML = '前进';
 }
 
 function updateCustomButtons() {

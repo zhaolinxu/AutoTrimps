@@ -462,17 +462,17 @@ function evaluateHeirloomMods(loom, location, upgrade) {
 var hrlmProtBtn1 = document.createElement("DIV");
 hrlmProtBtn1.setAttribute('class', 'noselect heirloomBtnActive heirBtn');
 hrlmProtBtn1.setAttribute('onclick', 'protectHeirloom(this, true)');
-hrlmProtBtn1.innerHTML = 'Protect/Unprotect';  //since we cannot detect the selected heirloom on load, ambiguous name
+hrlmProtBtn1.innerHTML = '保护/取消保护';  //since we cannot detect the selected heirloom on load, ambiguous name
 hrlmProtBtn1.id='protectHeirloomBTN1';
 var hrlmProtBtn2 = document.createElement("DIV");
 hrlmProtBtn2.setAttribute('class', 'noselect heirloomBtnActive heirBtn');
 hrlmProtBtn2.setAttribute('onclick', 'protectHeirloom(this, true)');
-hrlmProtBtn2.innerHTML = 'Protect/Unprotect';
+hrlmProtBtn2.innerHTML = '保护/取消保护';
 hrlmProtBtn2.id='protectHeirloomBTN2';
 var hrlmProtBtn3 = document.createElement("DIV");
 hrlmProtBtn3.setAttribute('class', 'noselect heirloomBtnActive heirBtn');
 hrlmProtBtn3.setAttribute('onclick', 'protectHeirloom(this, true)');
-hrlmProtBtn3.innerHTML = 'Protect/Unprotect';
+hrlmProtBtn3.innerHTML = '保护/取消保护';
 hrlmProtBtn3.id='protectHeirloomBTN3';
 document.getElementById('equippedHeirloomsBtnGroup').appendChild(hrlmProtBtn1);
 document.getElementById('carriedHeirloomsBtnGroup').appendChild(hrlmProtBtn2);
@@ -499,7 +499,7 @@ function protectHeirloom(element, modify){
             element = document.getElementById('protectHeirloomBTN3');
     }
     if (element)
-        element.innerHTML = heirloom.protected ? 'UnProtect' : 'Protect';
+        element.innerHTML = heirloom.protected ? '取消保护' : '保护';
 }
 
 //wrapper for selectHeirloom, to handle the protect button

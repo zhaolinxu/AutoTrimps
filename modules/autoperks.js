@@ -84,7 +84,7 @@ ratios2.appendChild(dumpperk);
 //Create ratioPreset dropdown
 var ratioPresetLabel = document.createElement("Label");
 ratioPresetLabel.id = 'Ratio Preset Label';
-ratioPresetLabel.innerHTML = "Ratio Preset:";
+ratioPresetLabel.innerHTML = "比率预设:";
 ratioPresetLabel.setAttribute('style', 'margin-right: 1vw; color: white;');
 var ratioPreset = document.createElement("select");
 ratioPreset.id = 'ratioPreset';
