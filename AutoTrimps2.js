@@ -52,11 +52,7 @@ function initializeAutoTrimps() {
 }
 
 function printChangelog() {
-    tooltip('confirm', null, 'update', '\<br><b class="AutoEggs">12/23 v2.1.6.0 </b><b style="background-color:#32CD32"> 新内容:</B> 加快升级速度，scryerinvoid可选择“从不”。当图表打开时，可以按下逃生按钮。 \
-<br><u>请报告任何错误/问题!<br 你可以在Discord找到我: <span style="background-color:#ddd;color:#222">genr8_#8163 </span>\
-<a href="https://discord.gg/0VbWe0dxB9kIfV2C"> @ AT Discord Channel</a></u>\
-<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">查看提交历史</a> (如果你想了解)\', 'cancelTooltip()', '脚本更新公告<br>' + ATversion);
->>>>>>> 97fc2a3d291439d31b3173627ebbfc289002d06e
+    tooltip('confirm', null, 'update', '\<br><b class="AutoEggs">12/23 v2.1.6.0 </b><b style="background-color:#32CD32"> 新内容:</B> 加快升级速度，scryerinvoid可选择“从不”。当图表打开时，可以按下逃生按钮。 \<br><u>请报告任何错误/问题!<br 你可以在Discord找到我: <span style="background-color:#ddd;color:#222">genr8_#8163 </span>\<a href="https://discord.gg/0VbWe0dxB9kIfV2C"> @ AT Discord Channel</a></u>\<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">查看提交历史</a> (如果你想了解)\', 'cancelTooltip()', '脚本更新公告<br>' + ATversion);
 }
 ////////////////////////////////////////
 //Main DELAY Loop///////////////////////
