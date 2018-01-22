@@ -698,9 +698,9 @@ function setGraphData(graph) {
                      totalVoids = allSaveData[i].voids;
                  }
             }
-            title = 'Void Maps Per Portal';
-            xTitle = 'Portal';
-            yTitle = 'Void Maps';
+            title = '每个传送门的虚空地图';
+            xTitle = '传送门';
+            yTitle = '虚空地图';
             yType = 'Linear';
             break;
 
@@ -772,7 +772,7 @@ function setGraphData(graph) {
             xTitle = 'Zone';
             yTitle = 'Clear Time';
             yType = 'Linear';
-            valueSuffix = ' Seconds';
+            valueSuffix = ' 秒';
             break;
         case 'Clear Time':
             graphData = allPurposeGraph('cleartime1',true,null,
@@ -783,7 +783,7 @@ function setGraphData(graph) {
             xTitle = 'Zone';
             yTitle = 'Clear Time';
             yType = 'Linear';
-            valueSuffix = ' Seconds';
+            valueSuffix = ' 秒';
             break;
         case 'Cumulative Clear Time #2':
             graphData = allPurposeGraph('cumucleartime2',true,null,
@@ -791,7 +791,7 @@ function setGraphData(graph) {
                         return Math.round(e1.zonetime);
                     },true);
             title = '(#2) Cumulative Time at END of zone#';
-            xTitle = 'Zone';
+            xTitle = '区域';
             yTitle = 'Cumulative Clear Time';
             yType = 'datetime';
             formatter =  function () {
@@ -842,7 +842,7 @@ function setGraphData(graph) {
         case 'HeHr % / LifetimeHe':
             graphData = allPurposeGraph('hehr',true,"string");
             title = 'He/Hr % of LifetimeHe';
-            xTitle = 'Zone';
+            xTitle = '区域';
             yTitle = 'He/Hr % of LifetimeHe';
             yType = 'Linear';
             precision = 4;

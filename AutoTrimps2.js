@@ -252,3 +252,34 @@ function userscripts()
 {
     //insert code here:
 }
+
+function cnname(name){
+    var temp=name;
+    var text="";
+    if(temp=="Core"){
+        text="核心";
+    }else if(temp=="Gear"){
+        text="装备";
+    }else if(temp=="Maps"){
+        text="地图";
+    }else if(temp=="Settings"){
+        text="设置";
+    }else if(temp=="genBTC"){
+        text="genBTC";
+    }else if(temp=="Uni"){
+        text="统一";
+    }else if(temp=="Scryer"){
+        text="占卜者";
+    }else if(temp=="Magma"){
+        text="岩浆";
+    }else if(temp=="Golden"){
+        text="金色";
+    }else if(temp=="Nature"){
+        text="自然";
+    }else if(temp=="Spam"){
+        text="垃圾邮件";
+    }else{
+        return name;
+    }
+    return text;
+}

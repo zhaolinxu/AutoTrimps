@@ -31,7 +31,7 @@ function createTabs(name, description) {
     a_0.className = "tablinks";
     a_0.setAttribute('onclick', 'toggleTab(event, \'' + name + '\')');
     a_0.href = "#";
-    a_0.appendChild(document.createTextNode(name));
+    a_0.appendChild(document.createTextNode(cnname(name)));
     li_0.id = 'tab' + name;
     li_0.appendChild(a_0);
 
@@ -89,17 +89,17 @@ function initializeAllTabs() {
     addtabsUL.className = "tab";
     addTabsDiv.appendChild(addtabsUL);
     //Make Tabs.
-    createTabs("Core", "Main Controls for the script");
+    createTabs("Core", "脚本的主要控件");
     createTabs("Gear", "Gear = Prestiges / Equipment settings");
     createTabs("Maps", "AutoMaps + VoidMaps related Settings");
-    createTabs("Settings", "Sub Controls for the script");
+    createTabs("Settings", "脚本的子控件");
     createTabs("genBTC", "GenBTC Advanced");
-    createTabs("Uni", "Uni's mods");
+    createTabs("Uni", "Uni's 模式");
     createTabs("Scryer", "Scryer Stance");
-    createTabs("Magma", "Dimensional Generator");
-    createTabs("Golden", "Golden Upgrade Strategies");
-    createTabs("Nature", "Nature");
-    createTabs("Spam", "Controls AutoTrimps message Spam");
+    createTabs("Magma", "维度发生器");
+    createTabs("Golden", "黄金升级策略");
+    createTabs("Nature", "自然");
+    createTabs("Spam", "控制自动脆皮的消息");
     createTabs("导入/导出", "导入导出脚本配置");
     //add a minimize button:
     var li_0 = document.createElement('li');
@@ -276,7 +276,7 @@ function initializeAllSettings() {
     createSetting('AutoGen2Override', ['Override Final Only', 'Strong Override'], 'Overrides apply to the final mode (always use early mode), or also to early mode (will stop microtick etc). Normal will not change anything.', 'multitoggle', 1, null, 'Magma');
 
     document.getElementById('AutoGen2Override').parentNode.insertAdjacentHTML('afterend','<hr>');
-    createSetting('MagmiteExplain', 'Magmite spending behaviour', '1. Buy one-and-done upgrades, expensive first, then consider 1st level of Overclocker;<br>2. Buy Overclocker IF AND ONLY IF we can afford it;<br>2.5. Exit if OneTimeOnly<br>3. Buy Efficiency if it is better than capacity;<br>4. Buy Capacity or Supply depending on which is cheaper, or based on SupplyWall', 'infoclick', 'MagmiteExplain', null, 'Magma');
+    createSetting('MagmiteExplain', '磁石消费行为', '1. 购买一次性的升级，昂贵的先买，然后考虑第一级的Overclocker;<br>2. 如果我们能负担得起，就买Overclocker;<br>2.5. Exit if OneTimeOnly<br>3. Buy Efficiency if it is better than capacity;<br>4. Buy Capacity or Supply depending on which is cheaper, or based on SupplyWall', 'infoclick', 'MagmiteExplain', null, 'Magma');
     createSetting('AutoMagmiteSpender2', ['Spend Magmite OFF', 'Spend Magmite (Portal)', 'Spend Magmite Always'], 'Auto Spends any unspent Magmite immediately before portaling. (Or Always, if toggled). Part 1 buys any permanent one-and-done upgrades in order from most expensive to least. Part 2 then analyzes Efficiency vs Capacity for cost/benefit, and buys Efficiency if its BETTER than Capacity. If not, if the PRICE of Capacity is less than the price of Supply, it buys Capacity. If not, it buys Supply. And then it repeats itself until you run out of Magmite and cant buy anymore. For Magma z230+ purposes.', 'multitoggle', 1, null, 'Magma');
     createSetting('SupplyWall', 'Throttle Supply (or Capacity)', 'Positive number NOT 1 e.g. 2.5: Consider Supply when its cost * 2.5 is < Capacity, instead of immediately when < Cap. Effectively throttles supply for when you don\'t need too many.<br><br>Negative number (-1 is ok) e.g. -2.5: Consider Supply if it costs < Capacity * 2.5, buy more supplys! Effectively throttling capacity instead.<br><br><b>Set to 1: DISABLE SUPPLY only spend magmite on Efficiency, Capacity and Overclocker. (For some end game players, supply is worth probably figuratively nothing.)<br>Set to 0: IGNORE SETTING and use old behaviour (will still try to buy overclocker)</b>', 'valueNegative', 2, null, 'Magma');
     createSetting('OneTimeOnly', 'One Time / Overclock Only', 'Makes the magmite spending sequence only buy one time upgrades and overclock, ignoring Efficiency, Capacity and Supply. Intended for manual use. Does not disable itself.', 'boolean', false, null, 'Magma');
@@ -289,7 +289,7 @@ function initializeAllSettings() {
     createSetting('goldZone', 'goldZone', 'Buy a helium upgrade until zone X, then buy battle upgrades.', 'value', '200', null, 'Golden');
 
 // Nature settings:
-    createSetting('AutoNatureTokens', 'Spend Nature Tokens', '<b>MASTER BUTTON</b> Automatically spend or convert nature tokens.', 'boolean', false, null, 'Nature');
+    createSetting('AutoNatureTokens', 'Spend Nature Tokens', '<b>主键</b> Automatically spend or convert nature tokens.', 'boolean', false, null, 'Nature');
     createSetting('AutoPoison', 'Poison', 'Spend/convert Poison tokens', 'dropdown', 'Off', ['Off', 'Empowerment', 'Transfer', 'Convert to Wind', 'Convert to Ice'], 'Nature');
     createSetting('AutoWind', 'Wind', 'Spend/convert Wind tokens', 'dropdown', 'Off', ['Off', 'Empowerment', 'Transfer', 'Convert to Poison', 'Convert to Ice'], 'Nature');
     createSetting('AutoIce', 'Ice', 'Spend/convert Ice tokens', 'dropdown', 'Off', ['Off', 'Empowerment', 'Transfer', 'Convert to Poison', 'Convert to Wind'], 'Nature');
@@ -304,10 +304,10 @@ function initializeAllSettings() {
     createSetting('SpamJobs', 'Job Spam', 'Job Spam = All jobs, in scientific notation', 'boolean', false, null, 'Spam');
 
 // Export/Import/Default settings
-    createSetting('ExportAutoTrimps', 'Export AutoTrimps', 'Export your Settings.', 'infoclick', 'ExportAutoTrimps', null, '导入/导出');
-    createSetting('ImportAutoTrimps', 'Import AutoTrimps', 'Import your Settings.', 'infoclick', 'ImportAutoTrimps', null, '导入/导出');
-    createSetting('DefaultAutoTrimps', 'Reset to Default', 'Reset everything to the way it was when you first installed the script.', 'infoclick', 'DefaultAutoTrimps', null, '导入/导出');
-    createSetting('CleanupAutoTrimps', 'Cleanup Saved Settings ', 'Deletes old values from previous versions of the script from your AutoTrimps Settings file.', 'infoclick', 'CleanupAutoTrimps', null, '导入/导出');
+    createSetting('ExportAutoTrimps', '导出自动脆皮配置', '导出你的配置。', 'infoclick', 'ExportAutoTrimps', null, '导入/导出');
+    createSetting('ImportAutoTrimps', '导入自动脆皮配置', '导入你的配置。', 'infoclick', 'ImportAutoTrimps', null, '导入/导出');
+    createSetting('DefaultAutoTrimps', '重置自动脆皮配置', '把所有配置项目都重置到你第一次安装脚本的时候。', 'infoclick', 'DefaultAutoTrimps', null, '导入/导出');
+    createSetting('CleanupAutoTrimps', '清理已保存的设置 ', '从您的自动脆皮设置文件中删除以前版本的脚本的旧值。', 'infoclick', 'CleanupAutoTrimps', null, '导入/导出');
     //createSetting('ExportModuleVars', 'Export Custom Variables', 'Export your custom MODULES variables.', 'infoclick', 'ExportModuleVars', null, '导入/导出');
     //createSetting('ImportModuleVars', 'Import Custom Variables', 'Import your custom MODULES variables (and save).', 'infoclick', 'ImportModuleVars', null, '导入/导出');
     //createSetting('ResetModuleVars', 'Reset Custom Variables', 'Reset(Delete) your custom MODULES variables, and return the script to normal. ', 'infoclick', 'ResetModuleVars', null, '导入/导出');
@@ -394,7 +394,7 @@ function AutoTrimpsTooltip(what, isItIn, event) {
         costText = "<div class='maxCenter'><div id='confirmTooltipBtn' class='btn btn-info' onclick='cancelTooltip();'>OK</div></div>";
     } else if (what == 'MagmiteExplain') {
         tooltipText = "<img src='" + base + "mi.png'>";
-        costText = "<div class='maxCenter'><div id='confirmTooltipBtn' class='btn btn-info' onclick='cancelTooltip();'>I don't get it at all</div></div>";
+        costText = "<div class='maxCenter'><div id='confirmTooltipBtn' class='btn btn-info' onclick='cancelTooltip();'>我一点也不明白</div></div>";
     }
     game.global.lockTooltip = true;
     elem.style.left = "33.75%";
