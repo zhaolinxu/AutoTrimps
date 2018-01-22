@@ -48,7 +48,7 @@ function initializeAutoTrimps() {
         document.head.appendChild($link);
     }
     //
-    debug('AutoTrimps v' + ATversion + ' Loaded!', '*spinner3');
+    debug('自动脆皮 版本号 ' + ATversion + ' 已加载!', '*spinner3');
 }
 
 function printChangelog() {

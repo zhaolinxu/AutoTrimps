@@ -16,7 +16,7 @@ head.appendChild(chartscript);
 
 //Create the graph button and div
 var newItem = document.createElement("TD");
-newItem.appendChild(document.createTextNode("Graphs"));
+newItem.appendChild(document.createTextNode("图像"));
 newItem.setAttribute("class", "btn btn-default");
 newItem.setAttribute("onclick", "autoToggleGraph(); drawGraph();");
 var settingbarRow = document.getElementById("settingsTable").firstElementChild.firstElementChild;
@@ -41,17 +41,17 @@ for (var item in graphList) {
 document.getElementById('graphFooterLine1').appendChild(btn);
 //just write it in HTML instead of a million lines of DOM javascript.
 document.getElementById("graphFooterLine1").innerHTML += '\
-<div><button onclick="drawGraph()">Refresh</button></div>\
+<div><button onclick="drawGraph()">刷新</button></div>\
 <div style="flex:0 100 5%;"></div>\
 <div><input type="checkbox" id="clrChkbox" onclick="toggleClearButton();"></div>\
-<div style="margin-left: 0.5vw;"><button id="clrAllDataBtn" onclick="clearData(null,true); drawGraph();" class="btn" disabled="" style="flex:auto; padding: 2px 6px;border: 1px solid white;">Clear All Previous Data</button></div>\
+<div style="margin-left: 0.5vw;"><button id="clrAllDataBtn" onclick="clearData(null,true); drawGraph();" class="btn" disabled="" style="flex:auto; padding: 2px 6px;border: 1px solid white;">清除所有以前的数据</button></div>\
 <div style="flex:0 100 5%;"></div>\
 <div style="flex:0 2 3.5vw;"><input style="width:100%;min-width: 40px;" id="deleteSpecificTextBox"></div>\
-<div style="flex:auto; margin-left: 0.5vw;"><button onclick="deleteSpecific(); drawGraph();">Delete Specific Portal</button></div>\
+<div style="flex:auto; margin-left: 0.5vw;"><button onclick="deleteSpecific(); drawGraph();">删除特定的传送门</button></div>\
 <div style="flex:0 100 5%;"></div>\
-<div style="flex:auto;"><button  onclick="GraphsImportExportTooltip(\'ExportGraphs\', null, \'update\')">Export your Graph Database</button></div>\
-<div style="float:right; margin-right: 0.5vw;"><button onclick="toggleSpecificGraphs()">Invert Selection</button></div>\
-<div style="float:right; margin-right: 1vw;"><button onclick="toggleAllGraphs()">All Off/On</button></div>';
+<div style="flex:auto;"><button  onclick="GraphsImportExportTooltip(\'ExportGraphs\', null, \'update\')">导出图形数据库</button></div>\
+<div style="float:right; margin-right: 0.5vw;"><button onclick="toggleSpecificGraphs()">反向选择</button></div>\
+<div style="float:right; margin-right: 1vw;"><button onclick="toggleAllGraphs()">全部关闭/开启</button></div>';
 document.getElementById("graphFooterLine2").innerHTML += '\
 <span style="float: left;" onmouseover=\'tooltip(\"Tips\", \"customText\", event, \"You can zoom by dragging a box around an area. You can turn portals off by clicking them on the legend. Quickly view the last portal by clicking it off, then Invert Selection. Or by clicking All Off, then clicking the portal on. To delete a portal, Type its portal number in the box and press Delete Specific. Using negative numbers in the Delete Specific box will KEEP that many portals (starting counting backwards from the current one), ie: if you have Portals 1000-1015, typing -10 will keep 1005-1015. Export Graph Database will make a backup of all the graph data (not that useful yet). There is a browser data storage limitation of 10MB, so do not exceed 15 portals-worth of data.\")\'>Tips: Hover for usage tips.</span>\
 <input style="height: 20px; float: right; margin-right: 0.5vw;" type="checkbox" id="rememberCB">\
@@ -590,7 +590,7 @@ function setGraphData(graph) {
                 currentZone = allSaveData[i].world;
 
             }
-            title = 'Helium/Hour Instantaneous - between current and last zone.';
+            title = '氦/小时 瞬时-在当前和最后的区域之间。';
             xTitle = 'Zone';
             yTitle = 'Helium/Hour per each zone';
             yType = 'Linear';
@@ -807,9 +807,9 @@ function setGraphData(graph) {
                     function specialCalc(e1,e2) {
                         return Math.round((e1.currentTime - e2.currentTime)-(e1.portalTime - e2.portalTime));
                     },true);
-            title = 'Cumulative Time at END of zone#';
-            xTitle = 'Zone';
-            yTitle = 'Cumulative Clear Time';
+            title = '累积时间在区域#结束。';
+            xTitle = '区域';
+            yTitle = '累积清除时间';
             yType = 'datetime';
             formatter =  function () {
                 var ser = this.series;
@@ -824,9 +824,9 @@ function setGraphData(graph) {
                     function specialCalc(e1,e2) {
                         return Math.floor(e1.heliumOwned / ((e1.currentTime - e1.portalTime) / 3600000));
                     });
-            title = 'Helium/Hour (Cumulative)';
-            xTitle = 'Zone';
-            yTitle = 'Helium/Hour';
+            title = '氦/小时(累计)';
+            xTitle = '区域';
+            yTitle = '氦/小时';
             yType = 'Linear';
             break;
         case 'Helium':
@@ -834,9 +834,9 @@ function setGraphData(graph) {
                     function specialCalc(e1,e2) {
                         return Math.floor(e1.heliumOwned);
                     });
-            title = 'Helium (earned)';
-            xTitle = 'Zone';
-            yTitle = 'Helium';
+            title = '氦(获得)';
+            xTitle = '区域';
+            yTitle = '氦';
             yType = 'Linear';
             break;
         case 'HeHr % / LifetimeHe':

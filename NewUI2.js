@@ -100,14 +100,14 @@ function initializeAllTabs() {
     createTabs("Golden", "Golden Upgrade Strategies");
     createTabs("Nature", "Nature");
     createTabs("Spam", "Controls AutoTrimps message Spam");
-    createTabs("Import Export", "Import Export Settings");
+    createTabs("导入/导出", "导入导出脚本配置");
     //add a minimize button:
     var li_0 = document.createElement('li');
     var a_0 = document.createElement('a');
     a_0.className = "tablinks minimize";
     a_0.setAttribute('onclick', 'minimizeAllTabs()');
     a_0.href = "#";
-    a_0.appendChild(document.createTextNode("Minimize All"));
+    a_0.appendChild(document.createTextNode("最小化所有"));
     li_0.appendChild(a_0);
     li_0.setAttribute("style", "float:right!important;");
     addtabsUL.appendChild(li_0);
@@ -304,13 +304,13 @@ function initializeAllSettings() {
     createSetting('SpamJobs', 'Job Spam', 'Job Spam = All jobs, in scientific notation', 'boolean', false, null, 'Spam');
 
 // Export/Import/Default settings
-    createSetting('ExportAutoTrimps', 'Export AutoTrimps', 'Export your Settings.', 'infoclick', 'ExportAutoTrimps', null, 'Import Export');
-    createSetting('ImportAutoTrimps', 'Import AutoTrimps', 'Import your Settings.', 'infoclick', 'ImportAutoTrimps', null, 'Import Export');
-    createSetting('DefaultAutoTrimps', 'Reset to Default', 'Reset everything to the way it was when you first installed the script.', 'infoclick', 'DefaultAutoTrimps', null, 'Import Export');
-    createSetting('CleanupAutoTrimps', 'Cleanup Saved Settings ', 'Deletes old values from previous versions of the script from your AutoTrimps Settings file.', 'infoclick', 'CleanupAutoTrimps', null, 'Import Export');
-    //createSetting('ExportModuleVars', 'Export Custom Variables', 'Export your custom MODULES variables.', 'infoclick', 'ExportModuleVars', null, 'Import Export');
-    //createSetting('ImportModuleVars', 'Import Custom Variables', 'Import your custom MODULES variables (and save).', 'infoclick', 'ImportModuleVars', null, 'Import Export');
-    //createSetting('ResetModuleVars', 'Reset Custom Variables', 'Reset(Delete) your custom MODULES variables, and return the script to normal. ', 'infoclick', 'ResetModuleVars', null, 'Import Export');
+    createSetting('ExportAutoTrimps', 'Export AutoTrimps', 'Export your Settings.', 'infoclick', 'ExportAutoTrimps', null, '导入/导出');
+    createSetting('ImportAutoTrimps', 'Import AutoTrimps', 'Import your Settings.', 'infoclick', 'ImportAutoTrimps', null, '导入/导出');
+    createSetting('DefaultAutoTrimps', 'Reset to Default', 'Reset everything to the way it was when you first installed the script.', 'infoclick', 'DefaultAutoTrimps', null, '导入/导出');
+    createSetting('CleanupAutoTrimps', 'Cleanup Saved Settings ', 'Deletes old values from previous versions of the script from your AutoTrimps Settings file.', 'infoclick', 'CleanupAutoTrimps', null, '导入/导出');
+    //createSetting('ExportModuleVars', 'Export Custom Variables', 'Export your custom MODULES variables.', 'infoclick', 'ExportModuleVars', null, '导入/导出');
+    //createSetting('ImportModuleVars', 'Import Custom Variables', 'Import your custom MODULES variables (and save).', 'infoclick', 'ImportModuleVars', null, '导入/导出');
+    //createSetting('ResetModuleVars', 'Reset Custom Variables', 'Reset(Delete) your custom MODULES variables, and return the script to normal. ', 'infoclick', 'ResetModuleVars', null, '导入/导出');
 }
 initializeAllSettings();
 
@@ -537,7 +537,7 @@ function automationMenuInit() {
     }
     //create the AutoTrimps Script button
     var newItem = document.createElement("TD");
-    newItem.appendChild(document.createTextNode("AutoTrimps"));
+    newItem.appendChild(document.createTextNode("自动脆皮"));
     newItem.setAttribute("class", "btn btn-default");
     newItem.setAttribute("onclick", "autoToggle()");
     var settingbarRow = document.getElementById("settingsTable").firstElementChild.firstElementChild;
@@ -549,7 +549,7 @@ function automationMenuInit() {
     newContainer.setAttribute("style", "display: block;");
     newContainer.setAttribute("id", "autoMapBtnContainer");
     var abutton = document.createElement("SPAN");
-    abutton.appendChild(document.createTextNode("Auto Maps"));
+    abutton.appendChild(document.createTextNode("自动地图"));
     abutton.setAttribute("class", "btn fightBtn btn-success");
     abutton.setAttribute("id", "autoMapBtn");
     abutton.setAttribute("onClick", "settingChanged('AutoMaps')");

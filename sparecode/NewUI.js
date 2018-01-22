@@ -283,7 +283,7 @@ function automationMenuInit() {
     }
     //create the button Automation button
     var newItem = document.createElement("TD");
-    newItem.appendChild(document.createTextNode("Automation"));
+    newItem.appendChild(document.createTextNode("自动化"));
     newItem.setAttribute("class", "btn btn-default");
     newItem.setAttribute("onclick", "autoToggle()");
     var settingbarRow = document.getElementById("settingsTable").firstElementChild.firstElementChild;
@@ -294,7 +294,7 @@ function automationMenuInit() {
     newContainer.setAttribute("style", "display: block;");
     newContainer.setAttribute("id", "autoMapBtnContainer");
     var abutton = document.createElement("SPAN");
-    abutton.appendChild(document.createTextNode("Auto Maps"));
+    abutton.appendChild(document.createTextNode("自动地图"));
     abutton.setAttribute("class", "btn fightBtn btn-success");
     abutton.setAttribute("id", "autoMapBtn");
     abutton.setAttribute("onClick", "settingChanged('AutoMaps')");
