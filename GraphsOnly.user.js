@@ -10,5 +10,5 @@
 // ==/UserScript==
 var script = document.createElement('script');
 script.id = 'AutoTrimps-script';
-script.src = 'https://zhaolinxu.github.io/AutoTrimps/Graphs.js';
+script.src = 'http://likexia.gitee.io/autotrimps/Graphs.js';
 document.head.appendChild(script);

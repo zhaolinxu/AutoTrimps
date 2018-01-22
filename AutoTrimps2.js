@@ -14,7 +14,7 @@ var ATversion = '2.1.6.0-genbtc-12-23-2017+Mod+Uni+coderpatsy';
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////
 var atscript = document.getElementById('AutoTrimps-script')
-  , base = 'https://zhaolinxu.github.io/AutoTrimps/'
+  , base = 'http://likexia.gitee.io/autotrimps/'
   , module = 'modules/'
   ;
 if (atscript !== null) {

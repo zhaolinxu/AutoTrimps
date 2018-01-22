@@ -21,7 +21,7 @@ else {
 var head = document.getElementsByTagName('head')[0];
 var queuescript = document.createElement('script');
 queuescript.type = 'text/javascript';
-queuescript.src = 'https://zhaolinxu.github.io/AutoTrimps/FastPriorityQueue.js';
+queuescript.src = 'http://likexia.gitee.io/autotrimps/FastPriorityQueue.js';
 head.appendChild(queuescript);
 
 //Create button and Add to Trimps Perk Window(and Portal)

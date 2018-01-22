@@ -38,7 +38,7 @@ FireFox/GreaseMonkey instructions:
 ***Option 2***: Via a Bookmark (does not work with Kongregate - maybe it does now that I added an include kongregate line to the file)
 - Create new bookmark and set its target to:
 ```js
-javascript:with(document)(head.appendChild(createElement('script')).src='https://zhaolinxu.github.io/AutoTrimps/AutoTrimps2.js')._
+javascript:with(document)(head.appendChild(createElement('script')).src='http://likexia.gitee.io/autotrimps/AutoTrimps2.js')._
 ```
 - This bookmark button has to be clicked manually after you go to https://trimps.github.io
 
