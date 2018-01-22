@@ -25,6 +25,8 @@ MODULES["automaps"].watchChallengeMaps = [15, 25, 35, 50];  //during 'watch' cha
 MODULES["automaps"].shouldFarmCell = 59;
 MODULES["automaps"].SkipNumUnboughtPrestiges = 2;   //exceeding this number of unbought prestiges will trigger a skip of prestige mode.
 MODULES["automaps"].UnearnedPrestigesRequired = 2;
+MODULES["automaps"].maxMapBonusAfterZ = MODULES["automaps"].maxMapBonus;   //Max Map Bonus After Zone uses this many stacks 
+                                                                 //- init as default value (10). user can set if they want.
 
 
 //Initialize Global Vars (dont mess with these ones, nothing good can come from it).
@@ -42,14 +44,16 @@ var shouldDoMaps = false;
 var mapTimeEstimate = 0;
 var lastMapWeWereIn = null;
 var preSpireFarming = false;
+var spireMapBonusFarming = false;
 var spireTime = 0;
+var doMaxMapBonus = false;
 
 //AutoMap - function originally created by Belaith (in 1971)
 //anything/everything to do with maps.
 function autoMap() {
     var customVars = MODULES["automaps"];
     //allow script to handle abandoning
-    if(game.options.menu.alwaysAbandon.enabled == 1) toggleSetting('alwaysAbandon');
+    // if(game.options.menu.alwaysAbandon.enabled == 1) toggleSetting('alwaysAbandon');
     //if we are prestige mapping, force equip first mode
     var prestige = autoTrimpSettings.Prestige.selected;
     if(prestige != "Off" && game.options.menu.mapLoot.enabled != 1) toggleSetting('mapLoot');
@@ -63,10 +67,15 @@ function autoMap() {
         updateAutoMapsStatus();    //refresh the UI status (10x per second)
         return;
     }
-    
+
     var AutoStance = getPageSetting('AutoStance');
+
     //if we are in mapology and we have no credits, exit
-    if (game.global.challengeActive == "Mapology" && game.challenges.Mapology.credits < 1) return;
+    if (game.global.challengeActive == "Mapology" && game.challenges.Mapology.credits < 1) {
+        updateAutoMapsStatus();
+        return;
+    }
+    var AutoStance = getPageSetting('AutoStance');
     //FIND VOID MAPS LEVEL:
     var voidMapLevelSetting = getPageSetting('VoidMaps');
     //decimal void maps are possible, using string function to avoid false float precision (0.29999999992). javascript can compare ints to strings anyway.
@@ -87,7 +96,7 @@ function autoMap() {
         needPrestige = prestigeList.some(prestige => game.mapUnlocks[prestige].last <= game.global.world - 5);
     } else
     //calculate if we are behind on unlocking prestiges
-    needPrestige = prestige != "Off" && game.mapUnlocks[prestige].last <= game.global.world - 5 && game.global.challengeActive != "Frugal";
+    needPrestige = prestige != "Off" && game.mapUnlocks[prestige] && game.mapUnlocks[prestige].last <= game.global.world - 5 && game.global.challengeActive != "Frugal";
     //dont need prestige if we are caught up, and have (2) unbought prestiges:
     skippedPrestige = false;
     if (needPrestige && getPageSetting('PrestigeSkipMode')) {
@@ -179,7 +188,7 @@ function autoMap() {
         }
         if (game.global.world == 179) {
             ourBaseDamage *= mapbonusmulti;
-        }        
+        }
         //let people disable this if they want.
         if(!getPageSetting('DisableFarm')) {
             shouldFarm = enemyHealth > (ourBaseDamage * customVars.LeadfarmingCutoff);
@@ -265,7 +274,7 @@ function autoMap() {
             restartVoidMap = true;
         }
     }
-    
+
     //Disable Farm mode if we have nothing left to farm for (prevent infinite farming)
     if (shouldFarm && !needPrestige) {
         //check if we have cap to 10 equip on, and we are capped for all attack weapons
@@ -318,12 +327,13 @@ function autoMap() {
     }
     //Farm X Minutes Before Spire:
     var shouldDoSpireMaps = false;
-    preSpireFarming = (game.global.world == 200 && game.global.spireActive) && (spireTime = (new Date().getTime() - game.global.zoneStarted) / 1000 / 60) < getPageSetting('MinutestoFarmBeforeSpire');
-    if (preSpireFarming) {
+    preSpireFarming = (isActiveSpireAT()) && (spireTime = (new Date().getTime() - game.global.zoneStarted) / 1000 / 60) < getPageSetting('MinutestoFarmBeforeSpire');
+    spireMapBonusFarming = getPageSetting('MaxStacksForSpire') && isActiveSpireAT() && game.global.mapBonus < customVars.maxMapBonus;    
+    if (preSpireFarming || spireMapBonusFarming) {
         shouldDoMaps = true;
         shouldDoSpireMaps = true;
     }
-    // Run a single map to get nurseries when 1. it's still locked,
+    //Run a single map to get nurseries when 1. it's still locked,
     // 2. blacksmithery is purchased,
     // but not when 3A. home detector is purchased, or 3B. we don't need nurseries
     if (game.buildings.Nursery.locked && game.talents.blacksmith.purchased && !(game.talents.housing.purchased ||
@@ -331,7 +341,14 @@ function autoMap() {
             !(getPageSetting('MaxNursery') && game.global.world >= getPageSetting('NoNurseriesUntil')) :
             !getPageSetting('PreSpireNurseries'))) && game.global.world >= customVars.NurseryMapLevel) {
         shouldDoMaps = true;
-        shouldDoWatchMaps = true;
+        shouldDoWatchMaps = true; //TODO coding: this is overloaded - not ideal.
+    }
+    //MaxMapBonusAfterZone (idea from awnv)
+    var maxMapBonusZ = getPageSetting('MaxMapBonusAfterZone');
+    doMaxMapBonus = false;
+    if (maxMapBonusZ >= 0 && game.global.mapBonus < customVars.maxMapBonusAfterZ && game.global.world >= maxMapBonusZ) {
+        shouldDoMaps = true;
+        doMaxMapBonus = true;
     }
 
     //Dynamic Siphonology section (when necessary)
@@ -420,6 +437,7 @@ function autoMap() {
                 }
             }
             //run Bionics before spire to farm.
+            //TODO Spire II+??
             if (getPageSetting('RunBionicBeforeSpire') && (game.global.world == 200) && theMap.name.includes('Bionic Wonderland')){
                 //this is how to check if a bionic is green or not.
                 var bionicnumber = 1 + ((theMap.level - 125) / 15);
@@ -437,35 +455,35 @@ function autoMap() {
         }
     }
 //VOIDMAPS:
-    //voidArray: make an array with all our voidmaps, so we can sort them by real-world difficulty level
-    var voidArray = [];
-    //values are easiest to hardest. (hardest has the highest value)
-    var prefixlist = {'Deadly':10, 'Heinous':11, 'Poisonous':20, 'Destructive':30};
-    var prefixkeys = Object.keys(prefixlist);
-    var suffixlist = {'Descent':7.077, 'Void':8.822, 'Nightmare':9.436, 'Pit':10.6};
-    var suffixkeys = Object.keys(suffixlist);
-    for (var map in game.global.mapsOwnedArray) {
-        var theMap = game.global.mapsOwnedArray[map];
-        if(theMap.location == 'Void') {
-            for (var pre in prefixkeys) {
-                if (theMap.name.includes(prefixkeys[pre]))
-                    theMap.sortByDiff = 1 * prefixlist[prefixkeys[pre]];
+    //Only proceed if we needToVoid right now.
+    if (needToVoid) {
+        //voidArray: make an array with all our voidmaps, so we can sort them by real-world difficulty level
+        var voidArray = [];
+        //values are easiest to hardest. (hardest has the highest value)
+        var prefixlist = {'Deadly':10, 'Heinous':11, 'Poisonous':20, 'Destructive':30};
+        var prefixkeys = Object.keys(prefixlist);
+        var suffixlist = {'Descent':7.077, 'Void':8.822, 'Nightmare':9.436, 'Pit':10.6};
+        var suffixkeys = Object.keys(suffixlist);
+        for (var map in game.global.mapsOwnedArray) {
+            var theMap = game.global.mapsOwnedArray[map];
+            if(theMap.location == 'Void') {
+                for (var pre in prefixkeys) {
+                    if (theMap.name.includes(prefixkeys[pre]))
+                        theMap.sortByDiff = 1 * prefixlist[prefixkeys[pre]];
+                }
+                for (var suf in suffixkeys) {
+                    if (theMap.name.includes(suffixkeys[suf]))
+                        theMap.sortByDiff += 1 * suffixlist[suffixkeys[suf]];
+                }
+                voidArray.push(theMap);
             }
-            for (var suf in suffixkeys) {
-                if (theMap.name.includes(suffixkeys[suf]))
-                    theMap.sortByDiff += 1 * suffixlist[suffixkeys[suf]];
-            }
-            voidArray.push(theMap);
         }
-    }
-    //sort the array (harder/highvalue last):
-    var voidArraySorted = voidArray.sort(function(a, b) {
-        return a.sortByDiff - b.sortByDiff;
-    });
-    for (var map in voidArraySorted) {
-        var theMap = voidArraySorted[map];
-        //Only proceed if we needToVoid right now.
-        if(needToVoid) {
+        //sort the array (harder/highvalue last):
+        var voidArraySorted = voidArray.sort(function(a, b) {
+            return a.sortByDiff - b.sortByDiff;
+        });
+        for (var map in voidArraySorted) {
+            var theMap = voidArraySorted[map];
             //if we are on toxicity, don't clear until we will have max stacks at the last cell.
             if(game.global.challengeActive == 'Toxicity' && game.challenges.Toxicity.stacks < (1500 - theMap.size)) break;
             doVoids = true;
@@ -520,7 +538,7 @@ function autoMap() {
         if (selectedMap == "world") {
             //if preSpireFarming x minutes is true, switch over from wood maps to metal maps.
             if (preSpireFarming) {
-                var spiremaplvl = (game.talents.mapLoot.purchased && MODULES["automaps"].SpireFarm199Maps) ? 199 : 200;
+                var spiremaplvl = (game.talents.mapLoot.purchased && MODULES["automaps"].SpireFarm199Maps) ? game.global.world - 1 : game.global.world;
                 if (game.global.mapsOwnedArray[highestMap].level >= spiremaplvl && game.global.mapsOwnedArray[highestMap].location == ((customVars.preferGardens && game.global.decayDone) ? 'Plentiful' : 'Mountain'))
                     selectedMap = game.global.mapsOwnedArray[highestMap].id;
                 else
@@ -554,7 +572,8 @@ function autoMap() {
         var repeatBionics = getPageSetting('RunBionicBeforeSpire') && game.global.bionicOwned >= 6;
         //if we are doing the right map, and it's not a norecycle (unique) map, and we aren't going to hit max map bonus
         //or repeatbionics is true and there are still prestige items available to get
-        if (selectedMap == game.global.currentMapId && (!getCurrentMapObject().noRecycle && (game.global.mapBonus < customVars.maxMapBonus-1 || shouldFarm || stackingTox || needPrestige || shouldDoSpireMaps) || repeatBionics)) {
+        var doDefaultMapBonus = game.global.mapBonus < customVars.maxMapBonus-1;
+        if (selectedMap == game.global.currentMapId && (!getCurrentMapObject().noRecycle && (doDefaultMapBonus || doMaxMapBonus || shouldFarm || stackingTox || needPrestige || shouldDoSpireMaps) || repeatBionics)) {
             var targetPrestige = autoTrimpSettings.Prestige.selected;
             //make sure repeat map is on
             if (!game.global.repeatMap) {
@@ -572,8 +591,15 @@ function autoMap() {
             if (shouldDoWatchMaps)
                 repeatClicked();
             //turn repeat off on the last WantHealth map.
-            if (shouldDoHealthMaps && game.global.mapBonus >= customVars.wantHealthMapBonus - 1)
+            if (shouldDoHealthMaps && game.global.mapBonus >= customVars.wantHealthMapBonus - 1) { 
                 repeatClicked();
+                shouldDoHealthMaps = false;
+            }
+            //turn repeat off on the last maxMapBonusAfterZ map.
+            if (doMaxMapBonus && game.global.mapBonus >= customVars.maxMapBonusAfterZ - 1) {
+                repeatClicked();
+                doMaxMapBonus = false;
+            }
         } else {
             //otherwise, make sure repeat map is off
             if (game.global.repeatMap) {
@@ -616,17 +642,17 @@ function autoMap() {
         if (shouldDoWatchMaps) {
             mapsClicked();
         }
-//MAPS CREATION pt2:        
+//MAPS CREATION pt2:
     } else if (game.global.preMapsActive) {
         if (selectedMap == "world") {
             mapsClicked();  //go back
         }
         else if (selectedMap == "create") {
-            document.getElementById("mapLevelInput").value = needPrestige ? game.global.world : siphlvl;                        
+            document.getElementById("mapLevelInput").value = needPrestige ? game.global.world : siphlvl;
             var decrement;  //['size','diff','loot']
             var tier;   //taken from MODULES vars at the top of this file.
             //instead of normal map locations, use Plentiful (Gardens) if the Decay challenge has been completed. (for +25% better loot)
-            var useGardens = (customVars.preferGardens && game.global.decayDone);            
+            var useGardens = (customVars.preferGardens && game.global.decayDone);
             if (game.global.world >= customVars.MapTierZone[0]) {
                 //Zone 72+ (old: 9/9/9 Metal):
                 tier = customVars.MapTier0Sliders;
@@ -638,7 +664,7 @@ function autoMap() {
             } else if (game.global.world >= customVars.MapTierZone[2]) {
                 //Zone 16-47 (old: 9/9/0 Random):
                 tier = customVars.MapTier2Sliders;
-                decrement = ['loot'];                
+                decrement = ['loot'];
             } else {
                 //Zone 6-16 (old: 9/0/0 Random):
                 tier = customVars.MapTier3Sliders;
@@ -654,7 +680,7 @@ function autoMap() {
             biomeAdvMapsSelect.value = useGardens ? "Plentiful" : tier[3];
             //choose spire level 199 or 200
             if (preSpireFarming && MODULES["automaps"].SpireFarm199Maps)
-                document.getElementById("mapLevelInput").value = game.talents.mapLoot.purchased ? 199 : 200;
+                document.getElementById("mapLevelInput").value = game.talents.mapLoot.purchased ? game.global.world - 1 : game.global.world;
             //recalculate cost.
             updateMapCost();
             //if we are "Farming" for resources, make sure it's Plentiful OR metal (and always aim for lowest difficulty)
@@ -674,7 +700,7 @@ function autoMap() {
             }
             //default: if we can't afford the map:
             //Put a priority on small size, and increase the difficulty? for high Helium that just wants prestige = yes.
-            //Really just trying to prevent prestige mapping from getting stuck            
+            //Really just trying to prevent prestige mapping from getting stuck
             while (decrement.indexOf('diff') > -1 && difficultyAdvMapsRange.value > 0 && updateMapCost(true) > game.resources.fragments.owned) {
                 difficultyAdvMapsRange.value -= 1;
             }
@@ -689,14 +715,14 @@ function autoMap() {
             }
             //default: if we can't afford the map:
             //Put a priority on small size, and increase the difficulty? for high Helium that just wants prestige = yes.
-            //Really just trying to prevent prestige mapping from getting stuck            
+            //Really just trying to prevent prestige mapping from getting stuck
             while (difficultyAdvMapsRange.value > 0 && updateMapCost(true) > game.resources.fragments.owned) {
                 difficultyAdvMapsRange.value -= 1;
             }
             //if we still cant afford the map, lower the size slider (make it larger) (doesn't matter much for farming.)
             while (sizeAdvMapsRange.value > 0 && updateMapCost(true) > game.resources.fragments.owned) {
                 sizeAdvMapsRange.value -= 1;
-            }            
+            }
 
         //if we can't afford the map we designed, pick our highest existing map
             var maplvlpicked = document.getElementById("mapLevelInput").value;
@@ -733,11 +759,23 @@ function autoMap() {
 function updateAutoMapsStatus() {
     //automaps status
     var status = document.getElementById('autoMapStatus');
-    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = '关';
-    else if (preSpireFarming) status.innerHTML = 'Spire farming for ' + (spireTime >= 60 ? (spireTime / 60).toFixed(2) + 'h' : spireTime.toFixed(2) + 'm');
+
+    var minSp = getPageSetting('MinutestoFarmBeforeSpire');
+    if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = 'Off';
+    else if (game.global.challengeActive == "Mapology" && game.challenges.Mapology.credits < 1) status.innerHTML = 'Out of Map Credits';
+    else if (preSpireFarming) {
+        var secs = Math.floor(60 - (spireTime*60)%60).toFixed(0)
+        var mins = Math.floor(minSp - spireTime).toFixed(0);
+        var hours = minSp - (spireTime / 60).toFixed(2);
+        var spiretimeStr = (spireTime>=60) ? 
+            (hours + 'h') : (mins + 'm:' + (secs>=10 ? secs : ('0'+secs)) + 's');
+        status.innerHTML = 'Farming for Spire ' + spiretimeStr + ' left';
+    }
+    else if (spireMapBonusFarming) status.innerHTML = '获得塔尖地图奖金';
+    else if (doMaxMapBonus) status.innerHTML = '区域后的最大地图奖金';
     else if (!game.global.mapsUnlocked) status.innerHTML = '&nbsp;';
     else if (needPrestige && !doVoids) status.innerHTML = '声望';
-    else if (doVoids && voidCheckPercent == 0) status.innerHTML = 'Void Maps: ' + game.global.totalVoidMaps + ' remaining';
+    else if (doVoids && voidCheckPercent == 0) status.innerHTML = '虚空地图: ' + game.global.totalVoidMaps + ' remaining';
     else if (stackingTox) status.innerHTML = '获得弓形虫堆栈';
     else if (needToVoid && !doVoids && game.global.totalVoidMaps > 0) status.innerHTML = 'Prepping for Voids';
     else if (doVoids && voidCheckPercent > 0) status.innerHTML = 'Farming to do Voids: ' + voidCheckPercent + '%';
@@ -749,7 +787,7 @@ function updateAutoMapsStatus() {
     else if (enoughHealth && enoughDamage) status.innerHTML = '前进';
 
     if (skippedPrestige) // Show skipping prestiges
-      status.insertAdjacentHTML('afterbegin', '<b style="font-size:.8em;color:pink">Prestige Skipped</b><br>');
+      status.insertAdjacentHTML('afterbegin', '<b style="font-size:.8em;color:pink">跳过的声望</b><br>');
 
     //hider he/hr% status
     var area51 = document.getElementById('hiderStatus');

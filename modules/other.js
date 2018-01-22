@@ -1,7 +1,3 @@
-MODULES["magmite"] = {};
-//These can be changed (in the console) if you know what you're doing:
-MODULES["magmite"].algorithm = 2;   //2 is advanced cost/benefit calculation between capacity/efficiency. 1 is buy-cheapest-upgrade.
-
 // Finish Challenge2
 function finishChallengeSquared() {
     // some checks done before reaching this:
@@ -29,29 +25,94 @@ function autoRoboTrimp() {
 
 //Version 3.6 Golden Upgrades
 function autoGoldenUpgradesAT() {
+    var setting = getPageSetting('AutoGoldenUpgrades');
     //get the numerical value of the selected index of the dropdown box
     try {
-        var setting = document.getElementById('AutoGoldenUpgrades').value;
         if (setting == "Off") return;   //if disabled, exit.
         var num = getAvailableGoldenUpgrades();
         if (num == 0) return;       //if we have nothing to buy, exit.
         //buy one upgrade per loop.
-        buyGoldenUpgrade(setting);
-        
+        var success = buyGoldenUpgrade(setting);
+        //Challenge^2 cant Get/Buy Helium, so adapt - do Derskagg mod.
+        var challSQ = game.global.runningChallengeSquared;        
+        var doDerskaggChallSQ = false;
+        if (setting == "Helium" && challSQ && !success)
+            doDerskaggChallSQ = true;
         // DZUGAVILI MOD - SMART VOID GUs
         // Assumption: buyGoldenUpgrades is not an asynchronous operation and resolves completely in function execution.
-        if (setting == "Void") { // we can only buy a few void GUs. We should check if we actually made the buy.
-            num = getAvailableGoldenUpgrades();
-            if (num == 0) return; // we actually bought the upgrade.
-            buyGoldenUpgrade("Helium"); // since we did not buy a "Void", we buy a "Helium" instead.
+        // Assumption: "Locking" game option is not set or does not prevent buying Golden Void
+        if (!success && setting == "Void" || doDerskaggChallSQ) {
+            num = getAvailableGoldenUpgrades(); //recheck availables.
+            if (num == 0) return;  //we already bought the upgrade...(unreachable)
+            // DerSkagg Mod - Instead of Voids, For every Helium upgrade buy X-1 battle upgrades to maintain speed runs
+            var goldStrat = getPageSetting('goldStrat');
+            if (goldStrat == "Alternating") {
+                var goldAlternating = getPageSetting('goldAlternating');
+                setting = (game.global.goldenUpgrades%goldAlternating == 0) ? "Helium" : "Battle";
+            } else if (goldStrat == "Zone") {
+                var goldZone = getPageSetting('goldZone');
+                setting = (game.global.world <= goldZone) ? "Helium" : "Battle";
+            } else
+                setting = (!challSQ) ? "Helium" : "Battle";
+            buyGoldenUpgrade(setting);
         }
-        // END OF DZUGAVILI MOD
-
+        // END OF DerSkagg & DZUGAVILI MOD
     } catch(err) { debug("Error in autoGoldenUpgrades: " + err.message); }
+}
+
+//auto spend nature tokens
+function autoNatureTokens() {
+    var changed = false;
+    for (var nature in game.empowerments) {
+        var empowerment = game.empowerments[nature];
+        var setting = getPageSetting('Auto' + nature);
+        if (!setting || setting == 'Off') continue;
+
+        //buy/convert once per nature per loop
+        if (setting == 'Empowerment') {
+            var cost = getNextNatureCost(nature);
+            if (empowerment.tokens < cost)
+                continue;
+            empowerment.tokens -= cost;
+            empowerment.level++;
+            changed = true;
+            debug('Upgraded Empowerment of ' + nature, 'other');
+        }
+        else if (setting == 'Transfer') {
+            if (empowerment.retainLevel >= 80)
+                continue;
+            var cost = getNextNatureCost(nature, true);
+            if (empowerment.tokens < cost) continue;
+            empowerment.tokens -= cost;
+            empowerment.retainLevel++;
+            changed = true;
+            debug('Upgraded ' + nature + ' transfer rate', 'other');
+        }
+        else {
+            if (empowerment.tokens < 10)
+                continue;
+            var match = setting.match(/Convert to (\w+)/);
+            var targetNature = match ? match[1] : null;
+            //sanity check
+            if (!targetNature || targetNature === nature || !game.empowerments[targetNature]) continue;
+            empowerment.tokens -= 10;
+            var convertRate = (game.talents.nature.purchased) ? ((game.talents.nature2.purchased) ? 8 : 6) : 5;
+            game.empowerments[targetNature].tokens += convertRate;
+            changed = true;
+            debug('Converted ' + nature + ' tokens to ' + targetNature, 'other');
+        }
+    }
+    if (changed)
+        updateNatureInfoSpans();
+}
+
+//Check if currently in a Spire past IgnoreSpiresUntil
+function isActiveSpireAT() {
+    return game.global.spireActive && game.global.world >= getPageSetting('IgnoreSpiresUntil');
 }
 
 //Exits the Spire after completing the specified cell.
 function exitSpireCell() {
-    if(game.global.world == 200 && game.global.spireActive && game.global.lastClearedCell >= getPageSetting('ExitSpireCell')-1)
+    if(isActiveSpireAT() && game.global.lastClearedCell >= getPageSetting('ExitSpireCell')-1)
         endSpire();
 }

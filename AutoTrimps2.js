@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         AutoTrimpsV2+unimod
-// @version      2.1.5.6-genbtc-8-26-2017+UniMod
-// @description  try to take over the world!
-// @author       zininzinin, spindrjr, belaith, ishakaru, genBTC, Unihedron
+// @name         AutoTrimpsV2
+// @version      2.1.6.0-genbtc-12-23-2017+Mod+Uni+coderpatsy
+// @description  Automate all the trimps!
+// @author       zininzinin, spindrjr, belaith, ishakaru, genBTC, Unihedron, coderPatsy
 // @include      *trimps.github.io*
 // @include      *kongregate.com/games/GreenSatellite/trimps
 // @grant        none
 // ==/UserScript==
-var ATversion = '2.1.5.6-genbtc-8-26-2017+Modular';
+var ATversion = '2.1.6.0-genbtc-12-23-2017+Mod+Uni+coderpatsy';
 
 ////////////////////////////////////////////////////////////////////////////////
 //Main Loader Initialize Function (loads first, load everything else)///////////
@@ -48,18 +48,15 @@ function initializeAutoTrimps() {
         document.head.appendChild($link);
     }
     //
-    debug('AutoTrimps v' + ATversion + ' Loaded!', '*spinner3');    
+    debug('AutoTrimps v' + ATversion + ' Loaded!', '*spinner3');
 }
 
 function printChangelog() {
-    tooltip('confirm', null, 'update', '\
-<br><b style="background-color:#002b3b;color:#fff;">8/26 v2.1.5.6</b>  将所有Unihedro的分支合并回genBTC分支。 （感谢UniHedro）\
-<br> 修复铅计算器，占卜设备，小修复。 (感谢FirenX) \
-<br> UniHedro保存格式已更新，首次加载可能会很奇怪。 \
-<br> 便宜的修复：切换威望下拉菜单，保存设置，*备份保存游戏*，*备份本脚本的设置*，刷新/重新启动浏览器。  \
-<br><u>欢迎提交您发现的任何错误/问题！ 你可以在Discord找到我： <span style="background-color:#ddd;color:#222">genr8_#8163</span></u>\
-<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">检查提交历史</a> (如果你想了解)\
-', 'cancelTooltip()', '脚本更新公告 ' + ATversion);
+    tooltip('confirm', null, 'update', '\<br><b class="AutoEggs">12/23 v2.1.6.0 </b><b style="background-color:#32CD32"> 新内容:</B> 加快升级速度，scryerinvoid可选择“从不”。当图表打开时，可以按下逃生按钮。 \
+<br><u>请报告任何错误/问题!<br 你可以在Discord找到我: <span style="background-color:#ddd;color:#222">genr8_#8163 </span>\
+<a href="https://discord.gg/0VbWe0dxB9kIfV2C"> @ AT Discord Channel</a></u>\
+<br><a href="https://github.com/genBTC/AutoTrimps/commits/gh-pages" target="#">查看提交历史</a> (如果你想了解)\', 'cancelTooltip()', '脚本更新公告<br>' + ATversion);
+>>>>>>> 97fc2a3d291439d31b3173627ebbfc289002d06e
 }
 ////////////////////////////////////////
 //Main DELAY Loop///////////////////////
@@ -79,9 +76,10 @@ function delayStartAgain(){
     setInterval(mainLoop, runInterval);
     setInterval(guiLoop, runInterval*10);
     updateCustomButtons();
-    document.getElementById('Prestige').value = autoTrimpSettings.PrestigeBackup.selected;
-    //MODULESdefault = MODULES;
-    //MODULESdefault = Object.assign({}, MODULES);
+    if (autoTrimpSettings.PrestigeBackup !== undefined && autoTrimpSettings.PrestigeBackup.selected != "")
+        document.getElementById('Prestige').value = autoTrimpSettings.PrestigeBackup.selected;
+    if (document.getElementById('Prestige').value === "")
+        document.getElementById('Prestige').value = "Off";
     MODULESdefault = JSON.parse(JSON.stringify(MODULES));
 }
 
@@ -151,8 +149,7 @@ function mainLoop() {
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
     addbreedTimerInsideText.innerHTML = parseFloat(game.global.lastBreedTime/1000).toFixed(1) + 's'; //add hidden next group breed timer;
     if (armycount.className != "tooltipadded") addToolTipToArmyCount();
-    const newZone = currentworld != game.global.world;
-    if ((newZone && mainCleanup()) // Z1 new world
+    if (mainCleanup() // Z1 new world
             || portalWindowOpen // in the portal screen (for manual portallers)
             || (!heirloomsShown && heirloomFlag) // closed heirlooms screen
             || (heirloomCache != game.global.heirloomsExtra.length)) { // inventory size changed (a drop appeared)
@@ -160,7 +157,7 @@ function mainLoop() {
         if (getPageSetting('AutoHeirlooms2')) autoHeirlooms2(); //"Auto Heirlooms 2" (heirlooms.js)
         else if (getPageSetting('AutoHeirlooms')) autoHeirlooms();//"Auto Heirlooms"      (")
         if (getPageSetting('AutoUpgradeHeirlooms') && !heirloomsShown) autoNull();  //"Auto Upgrade Heirlooms" (heirlooms.js)
-            
+
         heirloomCache = game.global.heirloomsExtra.length;
     }
     heirloomFlag = heirloomsShown;
@@ -171,7 +168,7 @@ function mainLoop() {
         firstgiga: getPageSetting('FirstGigastation'),
         deltagiga: getPageSetting('DeltaGigastation')
     }
-    if (newZone) {
+    if (aWholeNewWorld) {
         // Auto-close dialogues.
         switch (document.getElementById('tipTitle').innerHTML) {
             case 'The Improbability':   // Breaking the Planet
@@ -191,7 +188,7 @@ function mainLoop() {
     if (getPageSetting('ExitSpireCell') >0) exitSpireCell(); //"Exit Spire After Cell" (other.js)
     if (getPageSetting('WorkerRatios')) workerRatios(); //"Auto Worker Ratios"  (jobs.js)
     if (getPageSetting('BuyUpgrades')) buyUpgrades();   //"Buy Upgrades"       (upgrades.js)
-    autoGoldenUpgradesAT();    
+    autoGoldenUpgradesAT();
     if (getPageSetting('BuyStorage'))
         buyStorage();     //"Buy Storage"     (buildings.js)
     if (getPageSetting('BuyBuildings')) buyBuildings(); //"Buy Buildings"   (buildings.js)
@@ -200,12 +197,13 @@ function mainLoop() {
     if (getPageSetting('ManualGather2')<=2) manualLabor();  //"Auto Gather/Build"           (gather.js)
     else if (getPageSetting('ManualGather2')==3) manualLabor2();  //"Auto Gather/Build #2"     (")
     if (getPageSetting('AutoMaps')) autoMap();          //"Auto Maps"   (automaps.js)
+    else updateAutoMapsStatus();
     if (getPageSetting('GeneticistTimer') >= 0) autoBreedTimer(); //"Geneticist Timer" / "Auto Breed Timer"     (autobreedtimer.js)
     if (autoTrimpSettings.AutoPortal.selected != "Off") autoPortal();   //"Auto Portal" (hidden until level 40) (portal.js)
-    
+
     if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
-    if (newZone && getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
-    if (newZone && getPageSetting('FinishC2')>0 && game.global.runningChallengeSquared) finishChallengeSquared(); // "Finish Challenge2" (other.js)
+    if (aWholeNewWorld && getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
+    if (aWholeNewWorld && getPageSetting('FinishC2')>0 && game.global.runningChallengeSquared) finishChallengeSquared(); // "Finish Challenge2" (other.js)
     autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
 
     if (getPageSetting('UseScryerStance'))  useScryerStance();  //"Use Scryer Stance"   (scryer.js)
@@ -231,6 +229,8 @@ function mainLoop() {
     } catch (err) {
         debug("Error encountered in AutoMagmiteSpender(Always): " + err.message,"general");
     }
+
+    if (getPageSetting('AutoNatureTokens')) autoNatureTokens();
 
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
     if (userscriptOn) userscripts();

@@ -64,7 +64,7 @@ function autoPortal() {
                         else
                             doPortal();
                     },MODULES["portal"].timeout+100);
-                }                
+                }
             }
             break;
         case "Custom":
@@ -84,9 +84,12 @@ function autoPortal() {
         case "Balance":
         case "Decay":
         case "Electricity":
+        case "Life":
         case "Crushed":
         case "Nom":
         case "Toxicity":
+            if (getPageSetting('MaxTox'))
+                settingChanged("MaxTox");
         case "Watch":
         case "Lead":
         case "Corrupted":
@@ -142,7 +145,7 @@ function doPortal(challenge) {
     else if(challenge) {
         selectChallenge(challenge);
     }
-    //Push He Data: 
+    //Push He Data:
     pushData();
     //Actually Portal.
     activateClicked();

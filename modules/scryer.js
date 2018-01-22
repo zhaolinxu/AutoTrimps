@@ -10,6 +10,7 @@ function useScryerStance() {
     //check preconditions   (exit quick, if impossible to use)
     var use_auto = game.global.preMapsActive || game.global.gridArray.length === 0 || game.global.highestLevelCleared < 180;
     use_auto = use_auto || game.global.world <= 60;
+    use_auto = use_auto || game.global.mapsActive && getCurrentMapObject().location == "Void" && getPageSetting('ScryerUseinVoidMaps2') == 2;
     if (use_auto) {
         autostancefunction();
         wantToScry = false;
@@ -37,7 +38,7 @@ function useScryerStance() {
     var useoverkill = getPageSetting('ScryerUseWhenOverkill');
     if (useoverkill && game.portal.Overkill.level == 0)
         setPageSetting('ScryerUseWhenOverkill', false);
-    if (useoverkill && !game.global.mapsActive && game.global.world == 200 && game.global.spireActive && getPageSetting('ScryerUseinSpire2')==2)
+    if (useoverkill && !game.global.mapsActive && isActiveSpireAT() && getPageSetting('ScryerUseinSpire2')==2)
         useoverkill = false;
     //Overkill button being on and being able to overkill in S will override any other setting, regardless.
     if (useoverkill && game.portal.Overkill.level > 0) {
@@ -55,7 +56,7 @@ function useScryerStance() {
 
 //Any of these being true will indicate scryer should not be used, and cause the function to dump back to regular autoStance():
     //check for spire
-    use_auto = use_auto || !game.global.mapsActive && game.global.world == 200 && game.global.spireActive && getPageSetting('ScryerUseinSpire2')!=1;
+    use_auto = use_auto || !game.global.mapsActive && isActiveSpireAT() && getPageSetting('ScryerUseinSpire2')!=1;
     //check for voids
     use_auto = use_auto || game.global.mapsActive && getCurrentMapObject().location == "Void" && !getPageSetting('ScryerUseinVoidMaps2');
     //check for maps
