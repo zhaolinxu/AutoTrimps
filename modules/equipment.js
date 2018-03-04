@@ -382,21 +382,21 @@ function autoLevelEquipment() {
             //If we're considering an attack item, we want to buy weapons if we don't have enough damage, or if we don't need health (so we default to buying some damage)
             if (getPageSetting('BuyWeapons') && DaThing.Stat == 'attack' && (!enoughDamageE || enoughHealthE)) {
                 if (DaThing.Equip && !Best[stat].Wall && canAffordBuilding(eqName, null, null, true)) {
-                    debug('Leveling equipment ' + eqName, "equips", '*upload3');
+                    debug('升级装备 ' + eqName, "equips", '*upload3');
                     buyEquipment(eqName, null, true);
                 }
             }
             //If we're considering a health item, buy it if we don't have enough health, otherwise we default to buying damage
             if (getPageSetting('BuyArmor') && (DaThing.Stat == 'health' || DaThing.Stat == 'block') && !enoughHealthE) {
                 if (DaThing.Equip && !Best[stat].Wall && canAffordBuilding(eqName, null, null, true)) {
-                    debug('Leveling equipment ' + eqName, "equips", '*upload3');
+                    debug('升级装备 ' + eqName, "equips", '*upload3');
                     buyEquipment(eqName, null, true);
                 }
             }
             var aalvl2 = getPageSetting('AlwaysArmorLvl2') || (spirecheck);
             if (getPageSetting('BuyArmor') && (DaThing.Stat == 'health') && aalvl2 && game.equipment[eqName].level < 2){
                 if (DaThing.Equip && !Best[stat].Wall && canAffordBuilding(eqName, null, null, true)) {
-                    debug('Leveling equipment ' + eqName + " (AlwaysArmorLvl2)", "equips", '*upload3');
+                    debug('升级装备 ' + eqName + " (AlwaysArmorLvl2)", "equips", '*upload3');
                     buyEquipment(eqName, null, true);
                 }
             }
