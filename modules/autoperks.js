@@ -131,10 +131,9 @@ document.getElementById("portalWrapper").appendChild(customRatios);
 
 //BEGIN AUTOPERKS SCRIPT CODE:>>>>>>>>>>>>>>
 
-AutoPerks.saveDumpPerk = function() {
-    var dumpIndex = document.getElementById("dumpPerk").selectedIndex;
+function safeSetItems(name,data) {
     try {
-        localStorage.setItem('AutoperkSelectedDumpPresetID', dumpIndex);
+        localStorage.setItem(name, data);
     } catch(e) {
       if (e.code == 22) {
         // Storage full, maybe notify user or do some clean-up
@@ -142,20 +141,19 @@ AutoPerks.saveDumpPerk = function() {
       }
     }
 }
+
+AutoPerks.saveDumpPerk = function() {
+    var dumpIndex = document.getElementById("dumpPerk").selectedIndex;
+    safeSetItems('AutoperkSelectedDumpPresetID', dumpIndex);
+}
+
 AutoPerks.saveCustomRatios = function() {
     var perkRatioBoxes = document.getElementsByClassName('perkRatios');
     var customRatios = [];
     for(var i = 0; i < perkRatioBoxes.length; i++) {
         customRatios.push({'id':perkRatioBoxes[i].id,'value':parseFloat(perkRatioBoxes[i].value)});
     }
-    try {
-        localStorage.setItem('AutoPerksCustomRatios', JSON.stringify(customRatios));
-    } catch(e) {
-      if (e.code == 22) {
-        // Storage full, maybe notify user or do some clean-up
-        debug("Error: LocalStorage is full, or error. Attempt to delete some portals from your graph or restart browser.");
-      }
-    }
+    safeSetItems('AutoPerksCustomRatios', JSON.stringify(customRatios) );
 }
 
 //sets the ratioboxes with the default ratios embedded in the script when perks are instanciated. hardcoded @ lines 461-488 (ish)
@@ -190,14 +188,7 @@ AutoPerks.setDefaultRatios = function() {
         }
     }
     //save the last ratio used
-    try {
-        localStorage.setItem('AutoperkSelectedRatioPresetID', ratioSet);
-    } catch(e) {
-      if (e.code == 22) {
-        // Storage full, maybe notify user or do some clean-up
-        debug("Error: LocalStorage is full, or error. Attempt to delete some portals from your graph or restart browser.");
-      }
-    }
+    safeSetItems('AutoperkSelectedRatioPresetID', ratioSet);
 }
 
 //updates the internal perk variables with values grabbed from the custom ratio input boxes that the user may have changed.
@@ -221,7 +212,7 @@ AutoPerks.initialise = function() {
     //This does something important but oddly enough but i cant figure out how the local var carries over to mean something later.
     var perks = AutoPerks.getOwnedPerks();
     for(var i in perks) {
-        perks[i].level = 0;
+        perks[i].level = 0; //errors out here if a new perk is added.
         perks[i].spent = 0;
         perks[i].updatedValue = perks[i].value;
     }
@@ -276,9 +267,9 @@ AutoPerks.getHelium = function() {
 }
 
 AutoPerks.calculatePrice = function(perk, level) { // Calculate price of buying *next* level
-    if(perk.fluffy) return Math.ceil(perk.base * Math.pow(10,level));
-    if(perk.type == 'exponential') return Math.ceil(level/2 + perk.base * Math.pow(1.3, level));
-    else if(perk.type == 'linear') return Math.ceil(perk.base + perk.increase * level);
+    if(perk.fluffy) return Math.ceil(perk.base * Math.pow(perk.increase,level));
+    if(perk.type == 'exponential') return Math.ceil(level/2 + perk.base * Math.pow(perk.exprate, level));
+    if(perk.type == 'linear') return Math.ceil(perk.base + perk.increase * level);
 }
 
 AutoPerks.calculateTotalPrice = function(perk, finalLevel) {
@@ -495,6 +486,7 @@ AutoPerks.VariablePerk = function(name, base, compounding, value, baseIncrease, 
     this.name = name;
     this.base = base;
     this.type  = "exponential";
+    this.exprate = 1.3; //cost is usually 1.3x
     this.fixed = false;
     this.compounding = compounding;
     //this.value = value; // sets ratios (now done below)
@@ -505,7 +497,7 @@ AutoPerks.VariablePerk = function(name, base, compounding, value, baseIncrease, 
     this.level = level || 0; // How many levels have been invested into a perk
     this.spent = 0; // Total helium spent on each perk.
     function getRatiosFromPresets() {
-        //var perkOrder = [looting,toughness,power,motivation,pheromones,artisanistry,carpentry,resilience,coordinated,resourceful,overkill,curious,cunning];
+        //var perkOrder = [looting,toughness,power,motivation,pheromones,artisanistry,carpentry,resilience,coordinated,resourceful,overkill,cunning,curious];
         var valueArray = [];
         for (var i=0; i<presetList.length; i++) {
             valueArray.push(presetList[i][value]);
@@ -559,7 +551,7 @@ var preset_HiderBalance = [75, 4, 8, 4, 1, 4, 24, 1, 75, 0.5, 3, 1, 1];
 var preset_HiderMore = [20, 4, 10, 12, 1, 8, 8, 1, 40, 0.1, 0.5, 1, 1];
 var preset_genBTC = [100, 8, 8, 4, 4, 5, 18, 8, 14, 1, 1, 1, 1];
 var preset_genBTC2 = [96, 19, 15.4, 8, 8, 7, 14, 19, 11, 1, 1, 1, 1];
-var preset_Zek450 = [300, 1, 30, 2, 4, 2, 9, 8, 17, 0.1, 1, 1, 1];
+var preset_Zek450 = [300, 1, 30, 2, 4, 2, 9, 8, 17, 0.1, 1, 320, 1];
 var presetList = [preset_ZXV,preset_ZXVnew,preset_ZXV3,preset_TruthEarly,preset_TruthLate,preset_nsheetz,preset_nsheetzNew,preset_HiderHehr,preset_HiderBalance,preset_HiderMore,preset_genBTC,preset_genBTC2,preset_Zek450];
 //ratio was replaced by position, value will be pulled from ratios above later.
 var looting = new AutoPerks.VariablePerk("looting", 1, false,             0, 0.05);
@@ -580,8 +572,8 @@ var motivation_II = new AutoPerks.ArithmeticPerk("motivation_II", 50000, 1000, 0
 var carpentry_II = new AutoPerks.ArithmeticPerk("carpentry_II", 100000, 10000, 0.0025, carpentry);
 var looting_II = new AutoPerks.ArithmeticPerk("looting_II", 100000, 10000, 0.0025, looting);
 //fluffy perks
-var cunning = new AutoPerks.VariablePerk("cunning", 100000000000, false,      12, 0.05);
-var curious = new AutoPerks.VariablePerk("curious", 100000000000000, false,   13, 0.05);
+var cunning = new AutoPerks.VariablePerk("cunning", 100000000000, false,      11, 0.05);
+var curious = new AutoPerks.VariablePerk("curious", 100000000000000, false,   12, 0.05);
 //gather these into an array of objects
 AutoPerks.perkHolder = [siphonology, anticipation, meditation, relentlessness, range, agility, bait, trumps, packrat, looting, toughness, power, motivation, pheromones, artisanistry, carpentry, resilience, coordinated, resourceful, overkill, capable, cunning, curious, toughness_II, power_II, motivation_II, carpentry_II, looting_II];
 
